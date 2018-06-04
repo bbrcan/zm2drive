@@ -6,6 +6,7 @@
   "scripts": {
     "build": "babel src --out-dir build",
     "prepublish": "npm run build",
+    "preinstall": "npm run build",
     "start": "babel-node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
