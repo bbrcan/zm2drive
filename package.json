@@ -4,11 +4,11 @@
   "description": "Uploads ZoneMinder events to Google Drive.",
   "preferGlobal": true,
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "zm2drive": "./src/app.js"
+    "zm2drive": "./app.js"
   },
   "author": "",
   "license": "ISC",

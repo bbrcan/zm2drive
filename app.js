@@ -5,7 +5,8 @@
  */
 
 require('babel-register')({
-  cache: true
-})
+  cache: true,
+  only: '/src'
+});
 
-require('./main.js').default()
+require('./src/main.js').default();
