@@ -44,7 +44,9 @@ async function create(params, auth) {
 export async function listFiles(mimeType, folderId, auth) {
   const drive = google.drive({version: 'v3', auth})
   const response = await drive.files.list({
-    q: `mimeType = '${mimeType}' and trashed = false`,
+    q: (`mimeType = '${mimeType}'`
+      + ' and trashed = false '
+      + `and '${folderId}' in parents`),
     fields: `files(id, name, md5Checksum)`,
   })
   return response.data.files
