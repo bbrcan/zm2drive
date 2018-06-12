@@ -23,6 +23,17 @@ export async function findDir(name, auth) {
 }
 
 /**
+ * Deletes a file from Drive.
+ * @param fileId ID of file to delete.
+ * @param auth Authentication object.
+ * @return Promise object.
+ */
+export async function deleteFile(fileId, auth) {
+  const drive = google.drive({version: 'v3', auth})
+  return drive.files.delete({ fileId })
+}
+
+/**
  * Creates a new file on Drive.
  * @param params The params passed directly to drive.files.create
  * @param auth Authentication object.

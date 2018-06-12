@@ -89,9 +89,13 @@ export default async function main() {
     metavar: 'DATE',
   })
   parser.addArgument('--targetDir', {
-    help: 'Google Drive directory to upload files to',
+    help: 'Google Drive directory to upload files to.',
     defaultValue: 'zm-events',
     metavar: 'REMOTE_DIR',
+  })
+  parser.addArgument('--deleteOld', {
+    help: 'Deletes old archives from Google Drive.',
+    action: 'storeTrue'
   })
 
   const args = parser.parseArgs()
@@ -118,15 +122,30 @@ export default async function main() {
     console.log('Preparing.')
     const dir = await drive.createDir(args.targetDir, auth, true)
 
-    // fetch md5sums of already uploaded zip files
-    const existingFileChecksums = 
+    const existingFiles = 
       (await drive.listFiles('application/zip', dir.id, auth))
-      .map(f => f.md5Checksum)
+
+    // fetch md5sums of already uploaded zip files
+    const existingFileChecksums = existingFiles.map(f => f.md5Checksum)
 
     // filter only zip files that have not already been uploaded
     const zipFilesToUpload = zipFiles.filter(zipFile => 
       !(existingFileChecksums.includes(md5.sync(zipFile)))
     )
+
+    if (args.deleteOld) {
+
+      // delete files that exist on Drive, but not locally
+
+      const zipFileNames = zipFiles.map(f => path.basename(f))
+
+      const filesToDelete = existingFiles
+        .filter(f => !zipFileNames.includes(f.name))
+
+      console.log(`Deleting ${filesToDelete.length} existing files.`)
+
+      filesToDelete.forEach(f => drive.deleteFile(f.id, auth))
+    }
 
     const numUploaded = zipFilesToUpload.length
     const numSkipped = zipFiles.length - zipFilesToUpload.length
