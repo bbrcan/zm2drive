@@ -17,7 +17,8 @@ export async function findDir(name, auth) {
   const mimeType = 'application/vnd.google-apps.folder'
   const response = await drive.files.list({
     q: `name = '${name}' and mimeType = '${mimeType}' and trashed = false`,
-    fields: 'files(id, name)'
+    fields: 'files(id, name)',
+    pageSize: 1000
   })
   return response.data.files.find(f => (f.name === name))
 }
@@ -59,6 +60,7 @@ export async function listFiles(mimeType, folderId, auth) {
       + ' and trashed = false '
       + `and '${folderId}' in parents`),
     fields: `files(id, name, md5Checksum)`,
+    pageSize: 1000
   })
   return response.data.files
 }
