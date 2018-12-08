@@ -11,6 +11,9 @@ import md5 from 'md5-file'
 import * as drive from './drive'
 import { zipDir } from './zip'
 
+import { promisify } from 'util'
+const sleep = promisify(setTimeout)
+
 async function asyncForEach(array, callback) {
   for (let i = 0; i < array.length; ++i) {
     await callback(array[i])
@@ -144,7 +147,10 @@ export default async function main() {
 
       console.log(`Deleting ${filesToDelete.length} existing files.`)
 
-      filesToDelete.forEach(f => drive.deleteFile(f.id, auth))
+      // Google drive has a quota of 10 transactions per second per IP address.
+      // Wait 200 ms between deletes so a maximum of 5 delete transactions occur per second.
+      filesToDelete.forEach(f => drive.deleteFile(f.id, auth), await sleep(200))
+
     }
 
     const numUploaded = zipFilesToUpload.length
