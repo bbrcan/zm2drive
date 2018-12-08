@@ -192,6 +192,6 @@ function storeToken(token, tokenPath) {
       throw err
     }
   }
-  fs.writeFile(tokenPath, JSON.stringify(token))
+  fs.writeFileSync(tokenPath, JSON.stringify(token))
   console.log('Token stored to ' + tokenPath)
 }
