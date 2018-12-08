@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bbrcan/zm2drive.svg)](https://travis-ci.org/bbrcan/zm2drive)
+
 # zm2drive
 
 A tool for archiving ZoneMinder events to Google Drive, written in Node.JS.
